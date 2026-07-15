@@ -1,0 +1,105 @@
+ 
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url= env("DATABASE_URL")
+}
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  password     String   // hashed with bcrypt, never store plain text
+
+   verificationToken         String?
+    verificationTokenExpiry   DateTime?
+    isVerified                Boolean @default(true)
+  profileImage String?  // Cloudinary URL, nullable
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  transactions Transaction[]
+  categories   Category[]
+  budgets      Budget[]
+  goals        Goal[]
+
+  @@map("users")
+}
+
+model Category {
+  id     String  @id @default(uuid())
+  name   String
+  icon   String? // icon key/name, e.g. "utensils", "car"
+  color  String? // hex code for UI tag color
+
+  userId String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+  budgets      Budget[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name]) // no duplicate category names per user
+  @@map("categories")
+}
+
+model Transaction {
+  id          String           @id @default(uuid())
+  amount      Float
+  type        TransactionType
+  note        String?
+  date        DateTime         @default(now())
+
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([userId, date])       // fast lookups for dashboard/filtering
+  @@map("transactions")
+}
+
+model Budget {
+  id         String    @id @default(uuid())
+  amount     Float
+  month      Int        // 1-12
+  year       Int
+
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId String?    // null = overall monthly budget
+  category   Category?  @relation(fields: [categoryId], references: [id])
+
+  createdAt  DateTime   @default(now())
+
+  @@unique([userId, month, year, categoryId])
+  @@map("budgets")
+}
+
+model Goal {
+  id           String   @id @default(uuid())
+  title        String
+  targetAmount Float
+  savedAmount  Float    @default(0)
+  deadline     DateTime?
+  frequency    String?  // "Yearly", "Monthly" etc. from your UI
+
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+
+  @@map("goals")
+}
