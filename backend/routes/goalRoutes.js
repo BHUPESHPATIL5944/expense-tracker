@@ -6,9 +6,9 @@ const router=express.Router();
 router.use(protect);
 
 router.post('/',createGoal);
-router.get('/',getGoals),
+router.get('/',getGoals);
 router.put('/:id',updateGoal);
-router.patch('/:id/contribut',contributeToGoal);
+router.patch('/:id/contribute',contributeToGoal);
 router.delete('/:id',deleteGoal);
 
 export default router;

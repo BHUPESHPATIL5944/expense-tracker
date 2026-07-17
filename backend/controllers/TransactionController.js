@@ -68,7 +68,7 @@ export const getTransaction =asyncHandler(async(req,res)=>{
 
     res.json({
         success:true,
-        transaction:result,
+        transactions:result,
         nextCursor,
         hasNextPage,
     });

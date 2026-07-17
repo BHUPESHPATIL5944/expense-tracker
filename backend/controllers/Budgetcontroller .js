@@ -43,11 +43,11 @@ export const getBudgets=asyncHandler(async(req,res)=>{
     const m=month?parseInt(month,10):now.getMonth()+1;
     const y=year?parseInt(year,10):now.getFullYear();
 
-    const budget=await prisma.budget.findMany({
+    const budgets=await prisma.budget.findMany({
         where:{userId:req.user.id, month:m, year:y},
         include:{category:true},
     })
-    res.json({success:true, budget});
+    res.json({success:true, budgets});
 });
 export const deleteBudget=asyncHandler(async(req,res)=>{
     const existing=await prisma.budget.findFirst({

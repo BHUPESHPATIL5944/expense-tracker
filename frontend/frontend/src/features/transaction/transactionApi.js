@@ -2,19 +2,19 @@ import api from '@/lib/axios';
 
 
 export const getTransaction=async({pageParam,filters})=>{
-    const res=await api.get('/transaction',{
+    const res=await api.get('/transactions',{
         params:{cursor:pageParam,limit:10,...filters},
     });
     return res.data;
 };
 
 export const createTransaction=async(data)=>{
-    const res=await api.post('/transaction',data);
+    const res=await api.post('/transactions',data);
     return res.data.transaction;
 };
 
 export const updateTransaction=async({id,data})=>{
-    const res=await api.put('/transaction/${id}',data);
+    const res=await api.put('/transactions/${id}',data);
     return res.data.transaction;
 };
 export const deleteTransaction = async (id) => {

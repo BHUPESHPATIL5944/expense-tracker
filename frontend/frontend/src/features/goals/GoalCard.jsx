@@ -27,11 +27,11 @@ export default function GoalCard({ goal }) {
 
   const contributeMutation = useMutation({
     mutationFn: contributeToGoal,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['goals'] });
       setContributing(false);
       setAmount('');
-      toast.success(data.completed ? 'Goal completed! 🎉' : 'Contribution added');
+      toast.success(data.completed ? 'Goal completed!' : 'Contribution added');
     },
     onError: () => toast.error('Failed to add contribution'),
   });
@@ -55,8 +55,8 @@ export default function GoalCard({ goal }) {
           </p>
         </div>
         <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <button className="text-xs text-red-500">Remove</button>
+          <AlertDialogTrigger render={<button className="text-xs text-red-500" />}>
+            Remove
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

@@ -35,7 +35,7 @@ export default function BottomNav({ onAddClick }) {
               className={({ isActive }) =>
                 cn(
                   'flex flex-col items-center justify-center gap-1 text-xs px-3 py-2 rounded-xl transition-colors',
-                  isActive ? 'text-blue-600' : 'text-gray-400'
+                  isActive ? 'text-blue-600' : 'text-gray-400:text-gray-500'
                 )
               }
             >

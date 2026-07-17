@@ -7,7 +7,7 @@ export const getBudgets=async(month,year)=>{
 
 export const setBudget = async (data) => {
   const res = await api.post('/budgets', data);
-  return res.data.budget;
+  return res.data.budgets;
 };
 
 
